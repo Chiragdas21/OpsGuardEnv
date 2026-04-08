@@ -1,8 +1,7 @@
 # OpsGuardEnv
-<<<<<<< HEAD
-=======
+
 Evaluate AI agents on real operational decision-making, not just responses.
->>>>>>> aa5f38cb9be1eff5c2f2528045762c6c0c42a18b
+
 
 OpsGuardEnv is built around a simple question:
 
