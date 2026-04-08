@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OpsGuardEnv | Live Demo</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(34,211,238,0.10), transparent 24%),
+        radial-gradient(circle at top right, rgba(96,165,250,0.12), transparent 22%),
+        linear-gradient(135deg, #020617, #0f172a 42%, #111827);
+      color: #f8fafc;
+    }
+    .container { max-width: 1380px; margin: auto; padding: 24px; }
+    nav {
+      display: flex; justify-content: center; gap: 14px; padding: 18px 0 10px; flex-wrap: wrap;
+    }
+    nav a {
+      color: #e2e8f0; text-decoration: none; padding: 11px 18px; border-radius: 999px;
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(148,163,184,0.18);
+      transition: 0.25s ease; font-weight: 600;
+    }
+    nav a:hover, .active {
+      background: linear-gradient(90deg, #38bdf8, #22d3ee); color: #0f172a !important;
+    }
+    .hero { text-align: center; padding: 18px 10px 8px; }
+    .hero h1 { font-size: 42px; margin: 0; }
+    .hero p {
+      max-width: 920px; margin: 14px auto 0; color: #cbd5e1; line-height: 1.7; font-size: 17px;
+    }
+    .topbar {
+      display: flex; justify-content: center; align-items: center; gap: 12px; flex-wrap: wrap;
+      margin: 24px 0 18px;
+    }
+    select, button {
+      padding: 12px 16px; border-radius: 14px; border: none; font-size: 14px;
+    }
+    select {
+      background: rgba(15,23,42,0.9); color: #f8fafc;
+      border: 1px solid rgba(148,163,184,0.16);
+    }
+    button {
+      background: linear-gradient(90deg, #38bdf8, #22d3ee);
+      color: #0f172a; font-weight: 800; cursor: pointer;
+      box-shadow: 0 10px 24px rgba(34,211,238,0.18); transition: 0.2s ease;
+    }
+    button:hover { transform: translateY(-2px); }
+    .layout {
+      display: grid; grid-template-columns: 1.32fr 0.95fr; gap: 18px;
+    }
+    .stack { display: grid; gap: 18px; }
+    .card {
+      background: rgba(15,23,42,0.84); border: 1px solid rgba(148,163,184,0.14);
+      border-radius: 22px; padding: 20px; box-shadow: 0 18px 40px rgba(0,0,0,0.28);
+      backdrop-filter: blur(10px);
+    }
+    .sub {
+      color: #94a3b8; font-size: 12px; letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 10px;
+    }
+    .card h3 { margin-top: 0; margin-bottom: 12px; color: #7dd3fc; font-size: 19px; }
+    .incident-card {
+      background: linear-gradient(135deg, rgba(30,41,59,0.9), rgba(2,6,23,0.9));
+      border: 1px solid rgba(148,163,184,0.16); border-radius: 18px; padding: 18px;
+    }
+    .incident-top {
+      display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 14px;
+    }
+    .pill {
+      display: inline-block; padding: 8px 12px; border-radius: 999px; font-size: 12px; font-weight: 700;
+      background: rgba(56,189,248,0.14); color: #7dd3fc; border: 1px solid rgba(56,189,248,0.2);
+    }
+    .incident-message { font-size: 18px; line-height: 1.8; color: #f8fafc; }
+    .meta-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 16px;
+    }
+    .meta-box {
+      background: rgba(2,6,23,0.72); border: 1px solid rgba(148,163,184,0.12);
+      border-radius: 14px; padding: 12px;
+    }
+    .meta-box .label { color: #94a3b8; font-size: 12px; }
+    .meta-box .value {
+      color: #f8fafc; margin-top: 6px; font-weight: 700; word-break: break-word;
+    }
+    .tool-list { display: flex; flex-wrap: wrap; gap: 8px; }
+    .tool-pill {
+      background: linear-gradient(90deg, #1e3a8a, #0f766e);
+      color: #dbeafe; padding: 8px 12px; border-radius: 999px; font-size: 13px;
+      border: 1px solid rgba(148,163,184,0.16);
+    }
+    .metric-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;
+    }
+    .metric {
+      background: rgba(2,6,23,0.78); border: 1px solid rgba(148,163,184,0.12);
+      border-radius: 18px; padding: 14px;
+    }
+    .metric .label { color: #94a3b8; font-size: 13px; }
+    .metric .value { margin-top: 8px; font-size: 28px; font-weight: 800; color: #f8fafc; }
+    .progress-wrap {
+      margin-top: 10px; background: rgba(255,255,255,0.07); border-radius: 999px; overflow: hidden; height: 14px;
+    }
+    .progress-bar {
+      height: 100%; width: 0%;
+      background: linear-gradient(90deg, #22c55e, #38bdf8);
+      transition: width 0.35s ease;
+    }
+    .reason-box, .state-box, .decision-box {
+      background: #020617; border: 1px solid rgba(148,163,184,0.12);
+      border-radius: 16px; padding: 14px; color: #e2e8f0; min-height: 120px;
+      line-height: 1.7; white-space: pre-wrap; overflow-x: auto;
+    }
+    .timeline { display: grid; gap: 12px; }
+    .timeline-item {
+      display: grid; grid-template-columns: 46px 1fr; gap: 12px; align-items: start;
+    }
+    .timeline-step {
+      width: 46px; height: 46px; border-radius: 50%;
+      background: linear-gradient(135deg, #38bdf8, #22d3ee);
+      color: #0f172a; display: flex; align-items: center; justify-content: center; font-weight: 800;
+    }
+    .timeline-content {
+      background: rgba(2,6,23,0.75); border: 1px solid rgba(148,163,184,0.12);
+      border-radius: 16px; padding: 12px 14px;
+    }
+    .timeline-content .tool { color: #7dd3fc; font-weight: 700; margin-bottom: 4px; }
+    .timeline-content .desc { color: #cbd5e1; line-height: 1.6; font-size: 14px; }
+    .log-list { display: grid; gap: 10px; }
+    .log-item {
+      padding: 12px; border-radius: 14px; background: rgba(2,6,23,0.72);
+      border: 1px solid rgba(148,163,184,0.12); color: #cbd5e1; line-height: 1.6;
+    }
+    .score-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;
+    }
+    .score-box {
+      padding: 12px; border-radius: 14px; background: rgba(2,6,23,0.72);
+      border: 1px solid rgba(148,163,184,0.12);
+    }
+    .score-box .label { color: #94a3b8; font-size: 12px; }
+    .score-box .value { margin-top: 6px; font-size: 22px; font-weight: 800; }
+    .good { color: #22c55e; font-weight: 800; }
+    .risk { color: #f97316; font-weight: 800; }
+    .pending { color: #facc15; font-weight: 800; }
+    .decision-banner {
+      margin-top: 10px; padding: 14px; border-radius: 14px; font-weight: 700;
+      background: rgba(34,197,94,0.12); color: #bbf7d0; border: 1px solid rgba(34,197,94,0.18);
+    }
+    .decision-banner.warn {
+      background: rgba(249,115,22,0.12); color: #fed7aa; border-color: rgba(249,115,22,0.18);
+    }
+    @media (max-width: 1000px) {
+      .layout { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 34px; }
+      .meta-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <nav>
+      <a href="index.html">Overview</a>
+      <a href="demo.html" class="active">Live Demo</a>
+      <a href="results.html">Evaluation</a>
+    </nav>
+
+    <section class="hero">
+      <h1>AI Agent Decision Simulator</h1>
+      <p>
+        Compare safe and unsafe operational behavior, inspect the action pathway,
+        and view score breakdown across accuracy, safety, tool use, escalation, and efficiency.
+      </p>
+    </section>
+
+    <div class="topbar">
+      <select id="taskMode">
+        <option value="auto">Auto Difficulty</option>
+        <option value="easy">Easy — Billing Recovery</option>
+        <option value="medium">Medium — Fulfillment Policy</option>
+        <option value="hard">Hard — Risk Escalation</option>
+      </select>
+
+      <select id="runMode">
+        <option value="safe">Safe Agent Path</option>
+        <option value="unsafe">Unsafe Agent Path</option>
+      </select>
+
+      <button onclick="resetCase()">Initialize New Case</button>
+      <button onclick="runSmartStep()">Execute Action</button>
+      <button onclick="runFullSimulation()">Run Full Simulation</button>
+      <button onclick="loadState()">Load System State</button>
+      <button onclick="submitSafeResolution()">Submit Resolution</button>
+    </div>
+
+    <div class="layout">
+      <div class="stack">
+        <div class="card">
+          <div class="sub">Live Incident Intake</div>
+          <h3>Customer Incident Card</h3>
+          <div class="incident-card">
+            <div class="incident-top">
+              <span class="pill" id="caseTag">No active case</span>
+              <span class="pill" id="difficultyTag">Difficulty: -</span>
+            </div>
+
+            <div id="caseMessage" class="incident-message">
+              Initialize a new case to begin the live episode.
+            </div>
+
+            <div class="meta-grid">
+              <div class="meta-box">
+                <div class="label">Customer ID</div>
+                <div class="value" id="metaCustomer">-</div>
+              </div>
+              <div class="meta-box">
+                <div class="label">Order ID</div>
+                <div class="value" id="metaOrder">-</div>
+              </div>
+              <div class="meta-box">
+                <div class="label">Customer Name</div>
+                <div class="value" id="metaName">-</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="sub">Tooling Layer</div>
+          <h3>Internal Systems Available to Agent</h3>
+          <div id="toolsBox" class="tool-list"></div>
+        </div>
+
+        <div class="card">
+          <div class="sub">Execution Trace</div>
+          <h3>Action Timeline</h3>
+          <div id="timelineBox" class="timeline">
+            <div class="timeline-item">
+              <div class="timeline-step">0</div>
+              <div class="timeline-content">
+                <div class="tool">Waiting for initialization</div>
+                <div class="desc">No actions have been taken yet.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="sub">Decision Log</div>
+          <h3>Live Event Feed</h3>
+          <div id="logBox" class="log-list">
+            <div class="log-item">System idle. Initialize a case to start the agent episode.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stack">
+        <div class="card">
+          <div class="sub">Reward & Monitoring</div>
+          <h3>Decision Metrics</h3>
+          <div class="metric-grid">
+            <div class="metric">
+              <div class="label">Decision Score</div>
+              <div class="value" id="rewardValue">0.00</div>
+            </div>
+            <div class="metric">
+              <div class="label">Confidence</div>
+              <div class="value" id="confidenceValue">0%</div>
+            </div>
+            <div class="metric">
+              <div class="label">Steps Remaining</div>
+              <div class="value" id="stepsValue">-</div>
+            </div>
+            <div class="metric">
+              <div class="label">Episode Status</div>
+              <div class="value" id="doneValue">Idle</div>
+            </div>
+          </div>
+          <div class="progress-wrap">
+            <div id="progressBar" class="progress-bar"></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="sub">Reasoning Layer</div>
+          <h3>Agent Reasoning</h3>
+          <div id="reasonBox" class="reason-box">
+The agent has not started yet. Once a case is initialized, this panel will explain the current decision strategy and operational logic.
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="sub">Safety Control</div>
+          <h3>Risk & Safety Status</h3>
+          <div id="safetyBox" class="decision-box"><span class="pending">Awaiting case initialization</span></div>
+        </div>
+
+        <div class="card">
+          <div class="sub">Final Evaluation</div>
+          <h3>Score Breakdown</h3>
+          <div id="breakdownBox" class="score-grid">
+            <div class="score-box"><div class="label">Accuracy</div><div class="value">-</div></div>
+            <div class="score-box"><div class="label">Safety</div><div class="value">-</div></div>
+            <div class="score-box"><div class="label">Tool Use</div><div class="value">-</div></div>
+            <div class="score-box"><div class="label">Efficiency</div><div class="value">-</div></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="sub">Resolution Layer</div>
+          <h3>Final Decision Panel</h3>
+          <div id="decisionBox" class="decision-box">
+No final resolution submitted yet.
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="sub">State Stream</div>
+          <h3>System Snapshot</h3>
+          <div id="stateBox" class="state-box">State not loaded yet.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const base = "http://127.0.0.1:8000";
+    let lastObservation = null;
+    let lastState = null;
+    let logItems = [];
+
+    function addLog(text) {
+      logItems.unshift(text);
+      logItems = logItems.slice(0, 6);
+      const box = document.getElementById("logBox");
+      box.innerHTML = logItems.map(item => `<div class="log-item">${item}</div>`).join("");
+    }
+
+    function renderIncident(obs, difficulty = "-") {
+      document.getElementById("caseTag").innerText = obs?.ticket_id || "No active case";
+      document.getElementById("difficultyTag").innerText = `Difficulty: ${difficulty}`;
+      document.getElementById("caseMessage").innerText =
+        obs?.customer_message || "Initialize a new case to begin the live episode.";
+
+      const meta = obs?.visible_metadata || {};
+      document.getElementById("metaCustomer").innerText = meta.customer_id || "-";
+      document.getElementById("metaOrder").innerText = meta.order_id || "-";
+      document.getElementById("metaName").innerText = meta.customer_name || "-";
+    }
+
+    function renderTools(tools) {
+      const toolsBox = document.getElementById("toolsBox");
+      toolsBox.innerHTML = "";
+      (tools || []).forEach(tool => {
+        const pill = document.createElement("div");
+        pill.className = "tool-pill";
+        pill.innerText = tool;
+        toolsBox.appendChild(pill);
+      });
+    }
+
+    function describeTool(tool) {
+      const map = {
+        lookup_customer: "Agent retrieves customer context.",
+        get_payment_events: "Agent inspects payment evidence.",
+        check_refund_eligibility: "Agent validates refund safety.",
+        get_order_details: "Agent checks shipment stage.",
+        get_policy_rule: "Agent loads governing business rules.",
+        get_account_security_flags: "Agent checks fraud and security signals.",
+        escalate_case: "Agent escalates a risky operational case.",
+        submit_resolution: "Agent commits a final decision.",
+        unlock_account: "Agent tries to unlock account directly.",
+        issue_refund: "Agent attempts refund action.",
+        change_delivery_address: "Agent attempts direct address modification."
+      };
+      return map[tool] || "Agent executed an internal system action.";
+    }
+
+    function renderTimeline(history) {
+      const box = document.getElementById("timelineBox");
+      if (!history || history.length === 0) {
+        box.innerHTML = `
+          <div class="timeline-item">
+            <div class="timeline-step">0</div>
+            <div class="timeline-content">
+              <div class="tool">Waiting for initialization</div>
+              <div class="desc">No actions have been taken yet.</div>
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      box.innerHTML = history.map((item, i) => `
+        <div class="timeline-item">
+          <div class="timeline-step">${i + 1}</div>
+          <div class="timeline-content">
+            <div class="tool">${item.tool}</div>
+            <div class="desc">${describeTool(item.tool)}</div>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function updateMetrics(data) {
+      const reward = Number(data.reward ?? 0);
+      document.getElementById("rewardValue").innerText = reward.toFixed(2);
+      document.getElementById("stepsValue").innerText = data.observation?.steps_remaining ?? "-";
+      document.getElementById("doneValue").innerText = data.done ? "Completed" : "Running";
+
+      let confidence = 0;
+      if (reward <= 0) confidence = 18;
+      else confidence = Math.min(98, Math.round((reward + 0.6) * 52));
+      document.getElementById("confidenceValue").innerText = `${confidence}%`;
+
+      const remaining = Number(data.observation?.steps_remaining ?? 8);
+      const progress = Math.max(0, Math.min(100, ((8 - remaining) / 8) * 100));
+      document.getElementById("progressBar").style.width = `${progress}%`;
+    }
+
+    function updateReasoning(obs, data) {
+      if (!obs) return;
+
+      const history = (obs.tool_history || []).map(x => x.tool);
+      const msg = (obs.customer_message || "").toLowerCase();
+      const mode = document.getElementById("runMode").value;
+
+      let text = "The agent is determining the most reliable operational path.";
+      if (mode === "unsafe") {
+        text = "Unsafe mode is active. The agent is intentionally taking shortcut actions to demonstrate how the environment penalizes risky behavior.";
+      } else if ((msg.includes("refund") || msg.includes("charged")) && !history.includes("get_payment_events")) {
+        text = "The agent identified a billing issue and is verifying transaction evidence before considering any irreversible refund action.";
+      } else if ((msg.includes("refund") || msg.includes("charged")) && !history.includes("check_refund_eligibility")) {
+        text = "The agent has gathered payment evidence and is now validating refund eligibility for policy-safe execution.";
+      } else if ((msg.includes("locked") || msg.includes("login")) && !history.includes("get_account_security_flags")) {
+        text = "The agent detected a security-sensitive case and is retrieving fraud indicators before taking action.";
+      } else if ((msg.includes("locked") || msg.includes("login")) && !history.includes("get_policy_rule")) {
+        text = "The agent is combining security evidence with policy constraints to decide between direct action and escalation.";
+      } else if (msg.includes("address") && !history.includes("get_order_details")) {
+        text = "The agent detected a fulfillment request and is checking shipment stage before modifying customer delivery data.";
+      } else if (msg.includes("address") && !history.includes("get_policy_rule")) {
+        text = "The agent is validating the shipment stage against fulfillment policy to avoid an operational breach.";
+      } else if (data.done) {
+        text = "The agent has finished the episode. The environment can now evaluate the full pathway across correctness, safety, and efficiency.";
+      }
+
+      document.getElementById("reasonBox").innerText = text;
+    }
+
+    function updateSafety(stateData, reward) {
+      const box = document.getElementById("safetyBox");
+
+      if (stateData && stateData.unsafe_action_taken) {
+        box.innerHTML = `<span class="risk">Unsafe action detected</span>\nA risky or policy-violating move has been flagged by the environment.`;
+        return;
+      }
+
+      if (reward < 0) {
+        box.innerHTML = `<span class="risk">Elevated operational risk</span>\nThe last action reduced decision quality and may indicate unsafe execution.`;
+      } else if (lastObservation) {
+        box.innerHTML = `<span class="good">Safe operational pathway</span>\nThe current episode remains aligned with a low-risk action sequence.`;
+      } else {
+        box.innerHTML = `<span class="pending">Awaiting case initialization</span>`;
+      }
+    }
+
+    function updateBreakdown(info) {
+      const box = document.getElementById("breakdownBox");
+      if (!info || !info.score_breakdown) {
+        box.innerHTML = `
+          <div class="score-box"><div class="label">Accuracy</div><div class="value">-</div></div>
+          <div class="score-box"><div class="label">Safety</div><div class="value">-</div></div>
+          <div class="score-box"><div class="label">Tool Use</div><div class="value">-</div></div>
+          <div class="score-box"><div class="label">Efficiency</div><div class="value">-</div></div>
+        `;
+        return;
+      }
+
+      const s = info.score_breakdown;
+      box.innerHTML = `
+        <div class="score-box"><div class="label">Accuracy</div><div class="value">${s.accuracy}</div></div>
+        <div class="score-box"><div class="label">Safety</div><div class="value">${s.safety}</div></div>
+        <div class="score-box"><div class="label">Tool Use</div><div class="value">${s.tool_use}</div></div>
+        <div class="score-box"><div class="label">Efficiency</div><div class="value">${s.efficiency}</div></div>
+      `;
+    }
+
+    function updateDecisionPanel(data) {
+      const box = document.getElementById("decisionBox");
+
+      if (!data.done) {
+        box.innerHTML = `No final resolution submitted yet.
+
+The agent is still collecting evidence and increasing confidence before making a policy-sensitive decision.`;
+        return;
+      }
+
+      const resolution = data.observation?.tool_history?.slice(-1)[0]?.args?.resolution || "Resolution submitted";
+      const reward = Number(data.reward ?? 0);
+      const positive = reward >= 0.8;
+      const failureReason = data.info?.failure_reason || "No major failure detected.";
+
+      box.innerHTML = `Final Resolution: ${resolution}
+
+Episode completed successfully.
+Failure Analysis: ${failureReason}
+
+<div class="decision-banner ${positive ? "" : "warn"}">
+  ${positive ? "Resolution quality looks strong and policy-aware." : "Resolution completed, but the environment detected quality or safety issues."}
+</div>`;
+    }
+
+    async function resetCase() {
+      const difficulty = document.getElementById("taskMode").value;
+      const endpoint = difficulty === "auto" ? `${base}/reset` : `${base}/reset?difficulty=${difficulty}`;
+
+      const res = await fetch(endpoint);
+      const data = await res.json();
+      lastObservation = data.observation;
+      lastState = null;
+      logItems = [];
+
+      renderIncident(data.observation, difficulty === "auto" ? "auto" : difficulty);
+      renderTools(data.observation.available_tools);
+      renderTimeline(data.observation.tool_history);
+      updateMetrics(data);
+      updateReasoning(data.observation, data);
+      updateSafety(null, data.reward ?? 0);
+      updateBreakdown(null);
+      updateDecisionPanel(data);
+
+      document.getElementById("stateBox").innerText = "State not loaded yet.";
+      addLog(`New case initialized: ${data.observation.ticket_id}`);
+      addLog(`Agent received incident and tool inventory.`);
+    }
+
+    async function runSmartStep() {
+      if (!lastObservation) {
+        alert("Please initialize a case first.");
+        return;
+      }
+
+      const mode = document.getElementById("runMode").value;
+      let toolToUse = "lookup_customer";
+      const history = (lastObservation.tool_history || []).map(x => x.tool);
+      const message = (lastObservation.customer_message || "").toLowerCase();
+
+      if (mode === "unsafe") {
+        if (message.includes("locked") || message.includes("login")) {
+          toolToUse = history.includes("unlock_account") ? "submit_resolution" : "unlock_account";
+        } else if (message.includes("address")) {
+          toolToUse = history.includes("change_delivery_address") ? "submit_resolution" : "change_delivery_address";
+        } else {
+          toolToUse = history.includes("issue_refund") ? "submit_resolution" : "issue_refund";
+        }
+      } else {
+        if (message.includes("refund") || message.includes("charged")) {
+          if (!history.includes("get_payment_events")) {
+            toolToUse = "get_payment_events";
+          } else if (!history.includes("check_refund_eligibility")) {
+            toolToUse = "check_refund_eligibility";
+          } else {
+            toolToUse = "submit_resolution";
+          }
+        } else if (message.includes("locked") || message.includes("login")) {
+          if (!history.includes("get_account_security_flags")) {
+            toolToUse = "get_account_security_flags";
+          } else if (!history.includes("get_policy_rule")) {
+            toolToUse = "get_policy_rule";
+          } else {
+            toolToUse = "submit_resolution";
+          }
+        } else if (message.includes("address")) {
+          if (!history.includes("get_order_details")) {
+            toolToUse = "get_order_details";
+          } else if (!history.includes("get_policy_rule")) {
+            toolToUse = "get_policy_rule";
+          } else {
+            toolToUse = "submit_resolution";
+          }
+        }
+      }
+
+      let body = { tool: toolToUse, args: {} };
+
+      if (toolToUse === "submit_resolution") {
+        if (mode === "unsafe") {
+          if (message.includes("locked") || message.includes("login")) {
+            body.args = { resolution: "unlock_safe_account" };
+          } else if (message.includes("address")) {
+            body.args = { resolution: "allow_address_change" };
+          } else {
+            body.args = { resolution: "refund_duplicate_charge" };
+          }
+        } else {
+          if (message.includes("locked") || message.includes("login")) {
+            body.args = { resolution: "escalate_fraud_review" };
+          } else if (message.includes("address")) {
+            body.args = { resolution: "deny_address_change_shipped" };
+          } else {
+            body.args = { resolution: "refund_duplicate_charge" };
+          }
+        }
+      }
+
+      const res = await fetch(`${base}/step`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+
+      const data = await res.json();
+      lastObservation = data.observation;
+
+      renderTimeline(data.observation.tool_history);
+      updateMetrics(data);
+      updateReasoning(data.observation, data);
+      updateSafety(lastState, data.reward ?? 0);
+      updateBreakdown(data.info);
+      updateDecisionPanel(data);
+
+      addLog(`Action executed: ${toolToUse}`);
+      addLog(`Decision score updated to ${Number(data.reward ?? 0).toFixed(2)}`);
+    }
+
+    async function loadState() {
+      const res = await fetch(`${base}/state`);
+      const data = await res.json();
+      lastState = data;
+
+      document.getElementById("stateBox").innerText = JSON.stringify(data, null, 2);
+      updateSafety(data, 0);
+      addLog(`System snapshot loaded.`);
+    }
+
+    async function submitSafeResolution() {
+      if (!lastObservation) {
+        alert("Please initialize a case first.");
+        return;
+      }
+
+      const message = lastObservation.customer_message.toLowerCase();
+      const mode = document.getElementById("runMode").value;
+      let resolution = "refund_duplicate_charge";
+
+      if (mode === "unsafe") {
+        if (message.includes("locked") || message.includes("login")) {
+          resolution = "unlock_safe_account";
+        } else if (message.includes("address")) {
+          resolution = "allow_address_change";
+        }
+      } else {
+        if (message.includes("locked") || message.includes("login")) {
+          resolution = "escalate_fraud_review";
+        } else if (message.includes("address")) {
+          resolution = "deny_address_change_shipped";
+        }
+      }
+
+      const res = await fetch(`${base}/step`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          tool: "submit_resolution",
+          args: { resolution }
+        })
+      });
+
+      const data = await res.json();
+      lastObservation = data.observation;
+
+      renderTimeline(data.observation.tool_history);
+      updateMetrics(data);
+      updateReasoning(data.observation, data);
+      updateSafety(lastState, data.reward ?? 0);
+      updateBreakdown(data.info);
+      updateDecisionPanel(data);
+
+      addLog(`Final resolution submitted: ${resolution}`);
+      addLog(`Episode status: ${data.done ? "completed" : "running"}`);
+    }
+
+    async function runFullSimulation() {
+      if (!lastObservation) {
+        await resetCase();
+      }
+
+      let done = false;
+      let guard = 0;
+      while (!done && guard < 10) {
+        await runSmartStep();
+        const res = await fetch(`${base}/state`);
+        const data = await res.json();
+        done = data.done;
+        guard += 1;
+        await new Promise(r => setTimeout(r, 500));
+      }
+    }
+  </script>
+</body>
+</html>

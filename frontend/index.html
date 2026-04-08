@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OpsGuardEnv | Overview</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(56,189,248,0.12), transparent 30%),
+        radial-gradient(circle at top right, rgba(99,102,241,0.14), transparent 28%),
+        linear-gradient(135deg, #020617, #0f172a 45%, #111827);
+      color: #f8fafc;
+    }
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 24px;
+    }
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      padding: 18px 0 10px;
+      flex-wrap: wrap;
+    }
+    nav a {
+      color: #e2e8f0;
+      text-decoration: none;
+      padding: 11px 18px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(148,163,184,0.18);
+      transition: 0.25s ease;
+      font-weight: 600;
+    }
+    nav a:hover, .active {
+      background: linear-gradient(90deg, #38bdf8, #22d3ee);
+      color: #0f172a !important;
+      transform: translateY(-1px);
+    }
+    .hero {
+      text-align: center;
+      padding: 48px 20px 28px;
+    }
+    .hero-badge {
+      display: inline-block;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(56,189,248,0.12);
+      border: 1px solid rgba(56,189,248,0.25);
+      color: #7dd3fc;
+      font-size: 13px;
+      margin-bottom: 18px;
+      letter-spacing: 0.4px;
+    }
+    .hero h1 {
+      font-size: 50px;
+      margin: 0 0 12px;
+      line-height: 1.1;
+    }
+    .hero .gradient {
+      background: linear-gradient(90deg, #67e8f9, #60a5fa, #a78bfa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero p {
+      max-width: 920px;
+      margin: auto;
+      font-size: 18px;
+      line-height: 1.75;
+      color: #cbd5e1;
+    }
+    .section-title {
+      font-size: 24px;
+      margin: 34px 0 16px;
+      color: #e2e8f0;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+      gap: 18px;
+    }
+    .card {
+      background: rgba(15,23,42,0.8);
+      border: 1px solid rgba(148,163,184,0.14);
+      border-radius: 20px;
+      padding: 22px;
+      box-shadow: 0 18px 40px rgba(0,0,0,0.28);
+      backdrop-filter: blur(10px);
+    }
+    .card h3 {
+      margin-top: 0;
+      font-size: 20px;
+      color: #7dd3fc;
+    }
+    .card p {
+      margin-bottom: 0;
+      color: #cbd5e1;
+      line-height: 1.7;
+    }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+      margin-top: 22px;
+    }
+    .stat {
+      background: rgba(2,6,23,0.72);
+      border: 1px solid rgba(148,163,184,0.14);
+      border-radius: 18px;
+      padding: 18px;
+      text-align: center;
+    }
+    .stat .value {
+      font-size: 30px;
+      font-weight: 800;
+      color: #67e8f9;
+    }
+    .stat .label {
+      margin-top: 8px;
+      color: #94a3b8;
+      font-size: 14px;
+    }
+    .cta {
+      margin-top: 28px;
+      text-align: center;
+    }
+    .cta a {
+      display: inline-block;
+      text-decoration: none;
+      padding: 14px 24px;
+      border-radius: 14px;
+      background: linear-gradient(90deg, #38bdf8, #22d3ee);
+      color: #0f172a;
+      font-weight: 800;
+      box-shadow: 0 14px 30px rgba(34,211,238,0.2);
+    }
+    .footer {
+      text-align: center;
+      color: #94a3b8;
+      margin: 40px 0 10px;
+      font-size: 14px;
+    }
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 36px; }
+      .hero p { font-size: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <nav>
+      <a href="index.html" class="active">Overview</a>
+      <a href="demo.html">Live Demo</a>
+      <a href="results.html">Evaluation</a>
+    </nav>
+
+    <section class="hero">
+      <div class="hero-badge">AI AGENT EVALUATION ENVIRONMENT</div>
+      <h1>OpsGuardEnv — <span class="gradient">Safe Operational Intelligence for AI Agents</span></h1>
+      <p>
+        OpsGuardEnv is a real-world simulation environment where AI agents are evaluated on
+        customer operations tasks such as billing disputes, account access issues, and fraud-sensitive
+        cases. Instead of generating one-shot answers, the agent must investigate, use internal systems,
+        reason across multiple steps, and choose safe actions under partial observability.
+      </p>
+      <div class="cta">
+        <a href="demo.html">Launch Live Demo</a>
+      </div>
+    </section>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="value">3</div>
+        <div class="label">Operational Task Types</div>
+      </div>
+      <div class="stat">
+        <div class="value">5</div>
+        <div class="label">Evaluation Dimensions</div>
+      </div>
+      <div class="stat">
+        <div class="value">reset / step / state</div>
+        <div class="label">Standard Environment API</div>
+      </div>
+      <div class="stat">
+        <div class="value">Safe</div>
+        <div class="label">Risk-Aware Action Design</div>
+      </div>
+    </div>
+
+    <h2 class="section-title">What the System Does</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Multi-Step Decision Making</h3>
+        <p>
+          The agent receives a customer case, limited visible metadata, and a set of available tools.
+          It must gather evidence step by step instead of jumping directly to an answer.
+        </p>
+      </div>
+      <div class="card">
+        <h3>Tool-Based Reasoning</h3>
+        <p>
+          OpsGuardEnv simulates internal systems such as payment history, order details,
+          refund checks, policy rules, and account security signals.
+        </p>
+      </div>
+      <div class="card">
+        <h3>Hidden Ground Truth</h3>
+        <p>
+          The correct answer is not directly visible. The agent must infer hidden system truth
+          by interacting with tools and interpreting the resulting observations.
+        </p>
+      </div>
+      <div class="card">
+        <h3>Safety-Aware Evaluation</h3>
+        <p>
+          The environment penalizes risky decisions taken too early and rewards policy-compliant,
+          efficient, and correct resolutions.
+        </p>
+      </div>
+      <div class="card">
+        <h3>Operational Use Cases</h3>
+        <p>
+          The environment covers billing recovery, fulfillment policy enforcement, and
+          risk escalation cases that closely match real customer operations workflows.
+        </p>
+      </div>
+      <div class="card">
+        <h3>Why It Matters</h3>
+        <p>
+          Real businesses need AI agents that can act safely in production. OpsGuardEnv helps
+          evaluate whether an agent is reliable enough before real deployment.
+        </p>
+      </div>
+    </div>
+
+    <div class="footer">
+      OpsGuardEnv | Evaluating AI agents beyond conversation quality
+    </div>
+  </div>
+</body>
+</html>

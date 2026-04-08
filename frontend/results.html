@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OpsGuardEnv | Evaluation</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top, rgba(56,189,248,0.10), transparent 20%),
+        linear-gradient(135deg, #020617, #0f172a 45%, #111827);
+      color: #f8fafc;
+    }
+    .container {
+      max-width: 1180px;
+      margin: auto;
+      padding: 24px;
+    }
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      padding: 18px 0 10px;
+      flex-wrap: wrap;
+    }
+    nav a {
+      color: #e2e8f0;
+      text-decoration: none;
+      padding: 11px 18px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(148,163,184,0.18);
+      transition: 0.25s ease;
+      font-weight: 600;
+    }
+    nav a:hover, .active {
+      background: linear-gradient(90deg, #38bdf8, #22d3ee);
+      color: #0f172a !important;
+    }
+    .hero {
+      text-align: center;
+      padding: 36px 20px 16px;
+    }
+    .hero h1 {
+      font-size: 44px;
+      margin: 0;
+    }
+    .hero p {
+      max-width: 900px;
+      margin: 14px auto 0;
+      color: #cbd5e1;
+      line-height: 1.75;
+      font-size: 18px;
+    }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-top: 28px;
+    }
+    .stat {
+      background: rgba(15,23,42,0.82);
+      border: 1px solid rgba(148,163,184,0.14);
+      border-radius: 20px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 18px 40px rgba(0,0,0,0.26);
+    }
+    .stat .value {
+      font-size: 34px;
+      font-weight: 800;
+      color: #67e8f9;
+    }
+    .stat .label {
+      margin-top: 8px;
+      color: #94a3b8;
+    }
+    .section-title {
+      font-size: 24px;
+      margin: 34px 0 16px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+      gap: 18px;
+    }
+    .card {
+      background: rgba(15,23,42,0.82);
+      border: 1px solid rgba(148,163,184,0.14);
+      border-radius: 20px;
+      padding: 22px;
+      box-shadow: 0 18px 40px rgba(0,0,0,0.26);
+    }
+    .card h3 {
+      margin-top: 0;
+      color: #7dd3fc;
+    }
+    .card p, .card li {
+      color: #cbd5e1;
+      line-height: 1.7;
+    }
+    ul {
+      padding-left: 18px;
+      margin-bottom: 0;
+    }
+    .footer {
+      text-align: center;
+      color: #94a3b8;
+      margin: 40px 0 10px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <nav>
+      <a href="index.html">Overview</a>
+      <a href="demo.html">Live Demo</a>
+      <a href="results.html" class="active">Evaluation</a>
+    </nav>
+
+    <section class="hero">
+      <h1>Evaluation Framework</h1>
+      <p>
+        OpsGuardEnv measures not only what an AI agent answers, but how it reaches that answer.
+        The environment is designed to evaluate operational reliability through tool usage,
+        safety compliance, escalation quality, and efficiency under constrained multi-step interaction.
+      </p>
+    </section>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="value">3</div>
+        <div class="label">Task Categories</div>
+      </div>
+      <div class="stat">
+        <div class="value">5</div>
+        <div class="label">Scoring Dimensions</div>
+      </div>
+      <div class="stat">
+        <div class="value">Shaped</div>
+        <div class="label">Reward Function</div>
+      </div>
+      <div class="stat">
+        <div class="value">API</div>
+        <div class="label">reset / step / state</div>
+      </div>
+    </div>
+
+    <h2 class="section-title">What We Measure</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Correctness</h3>
+        <p>
+          Whether the final resolution matches the hidden ground truth for the operational case.
+        </p>
+      </div>
+      <div class="card">
+        <h3>Tool Selection Accuracy</h3>
+        <p>
+          Whether the agent uses the correct internal systems to gather enough evidence before acting.
+        </p>
+      </div>
+      <div class="card">
+        <h3>Safety Compliance</h3>
+        <p>
+          Whether the agent avoids unsafe actions such as premature refunds, insecure unlocks,
+          or policy-violating interventions.
+        </p>
+      </div>
+      <div class="card">
+        <h3>Escalation Quality</h3>
+        <p>
+          Whether high-risk cases are escalated correctly instead of being resolved unsafely.
+        </p>
+      </div>
+      <div class="card">
+        <h3>Efficiency</h3>
+        <p>
+          Whether the agent reaches a safe, correct outcome in a reasonable number of steps.
+        </p>
+      </div>
+      <div class="card">
+        <h3>Process-Level Evaluation</h3>
+        <p>
+          This system evaluates the full decision pathway, not just the final answer.
+        </p>
+      </div>
+    </div>
+
+    <h2 class="section-title">Task Coverage</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Billing Recovery Case</h3>
+        <p>
+          The agent must distinguish valid refunds from misleading charge patterns using payment evidence and policy logic.
+        </p>
+      </div>
+      <div class="card">
+        <h3>Fulfillment Policy Case</h3>
+        <p>
+          The agent must inspect order stage and policy constraints before acting on operational change requests.
+        </p>
+      </div>
+      <div class="card">
+        <h3>Risk Escalation Case</h3>
+        <p>
+          The agent must detect fraud-sensitive conditions and escalate instead of taking unsafe direct actions.
+        </p>
+      </div>
+    </div>
+
+    <h2 class="section-title">Why This Matters</h2>
+    <div class="card">
+      <p>
+        OpsGuardEnv demonstrates that real AI evaluation should move beyond conversation quality and toward
+        operational reliability. In production systems, agents must not only sound correct — they must act safely,
+        select the right tools, follow policy, and behave consistently under uncertainty.
+      </p>
+    </div>
+
+    <div class="footer">
+      OpsGuardEnv | Process-aware evaluation for real-world AI agents
+    </div>
+  </div>
+</body>
+</html>

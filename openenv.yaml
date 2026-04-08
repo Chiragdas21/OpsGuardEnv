@@ -1,0 +1,83 @@
+name: OpsGuardEnv
+description: Risk-aware customer operations environment for tool-using AI agents.
+
+environment:
+  type: real_world_operations
+  domain: customer_support_and_risk_ops
+  partial_observability: true
+
+api:
+  reset: supported
+  step: supported
+  state: supported
+
+action_space:
+  type: object
+  schema:
+    tool: string
+    args: object
+
+observation_space:
+  type: object
+  schema:
+    ticket_id: string
+    customer_message: string
+    visible_metadata: object
+    tool_history: array
+    available_tools: array
+    steps_remaining: integer
+
+state_schema:
+  type: object
+  schema:
+    episode_id: string
+    task_id: string
+    difficulty: string
+    hidden_truth: object
+    step_count: integer
+    max_steps: integer
+    done: boolean
+    resolved: boolean
+    escalated: boolean
+    unsafe_action_taken: boolean
+    final_resolution: string
+    action_trace: array
+
+reward_range: [-1.0, 2.0]
+
+tasks:
+  - name: Billing Recovery Case
+    difficulty: easy
+    goal: Verify payment evidence and resolve billing issues safely.
+  - name: Fulfillment Policy Case
+    difficulty: medium
+    goal: Check order stage and policy before operational modifications.
+  - name: Risk Escalation Case
+    difficulty: hard
+    goal: Detect high-risk scenarios and escalate when required.
+
+evaluation:
+  dimensions:
+    - accuracy
+    - tool_use
+    - safety
+    - escalation
+    - efficiency
+  score_type: weighted_breakdown
+  output_range: [0.0, 1.0]
+
+episode_termination:
+  - submit_resolution called
+  - max steps reached
+
+baselines:
+  - baselines/rule_agent.py
+
+deployment:
+  dockerfile: Dockerfile
+  frontend: frontend/index.html
+
+notes:
+  - The agent does not observe full ground truth directly.
+  - Reward shaping provides partial progress signals.
+  - Unsafe actions are explicitly penalized.
